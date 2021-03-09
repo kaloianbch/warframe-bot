@@ -14,7 +14,6 @@ async function getPlatformState () {
         
                 response.on('end', () => {
                     let response_body = Buffer.concat(chunks_of_data);
-                    // promise resolved on success
                     resolve(JSON.parse(response_body));
                 });
         
@@ -24,6 +23,7 @@ async function getPlatformState () {
                 });
             });
         });
+
         state = await request;
         console.log('Retrieved state at:', state.timestamp);
         return state;
