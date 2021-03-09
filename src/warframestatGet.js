@@ -1,41 +1,34 @@
+require('dotenv').config()
 const https = require('https');
 
-async function getPlatformState () {
-    var state = ''
-    var url = 'https://api.warframestat.us/pc'
-    try{
-        let request = new Promise((resolve, reject) => {
-            https.get(url, (response) => {
-                let chunks_of_data = [];
-        
-                response.on('data', (fragments) => {
-                    chunks_of_data.push(fragments);
-                });
-        
-                response.on('end', () => {
-                    let response_body = Buffer.concat(chunks_of_data);
-                    resolve(JSON.parse(response_body));
-                });
-        
-                response.on('error', (error) => {
-                    console.log('API response error:', error)
-                    reject(error);
-                });
-            });
-        });
-
-        state = await request;
-        console.log('Retrieved state at:', state.timestamp);
-        return state;
-    }
-    catch(err){
-        console.log(err);
-    }
-}
+//TODO - error handling for non 200 responses?
 
 module.exports = {
-    updatePlatformState: async function () {
-        let state = await getPlatformState();
-        return state;
+    getPlatformState: function () {
+        try{
+            return new Promise((resolve, reject) => {
+                https.get(process.env.API_URL, (response) => {
+                    let chunks_of_data = [];
+            
+                    response.on('data', (fragments) => {
+                        chunks_of_data.push(fragments);
+                    });
+            
+                    response.on('end', () => {
+                        console.log("API fetch resolved")
+                        let response_body = Buffer.concat(chunks_of_data);
+                        resolve(JSON.parse(response_body));
+                    });
+            
+                    response.on('error', (error) => {
+                        console.log('API fetch failed:', error)
+                        reject(error);
+                    });
+                });
+            });
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 }
