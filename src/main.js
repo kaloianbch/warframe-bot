@@ -9,20 +9,19 @@ const watchAlerts = require('./watchAlerts.js')
 const client = new Discord.Client();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
 
-let wfChannel;
-let wfState;
-let updateTimer;
+let wfChannel;      //discord channel for the bot to interact with
+let wfState;        // var for api data
+let updateTimer;    // ref for interval in order to stop it for restarts
 let prefix = process.env.PREFIX
 
+//populate commands list from files in commands folder
 client.commands = new Discord.Collection();
-
 for (const file of commandFiles) {
-
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
 
-
+// bot init
 client.on('ready', async () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
@@ -32,20 +31,19 @@ client.on('ready', async () => {
         wfChannel = channel;
     })
 
-    //Initial API data fetch
-    wfState = await warframeStateGet.getPlatformState();
-    //timer to update the API data every minute
+    wfState = await warframeStateGet.getPlatformState();    //init API fetch, followed by timer init
     updateTimer = setInterval(function() {
         let promise = warframeStateGet.getPlatformState();
         promise.then((state) => {
             wfState = state;
         })
         watchAlerts.watchCheck(wfChannel);
-    }, 15000);
+    }, 60000);
 
     wfChannel.send("Cephalon Cord is now online. Greetings Tenno.");
 });
 
+//command handler
 client.on('message', message => {
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 

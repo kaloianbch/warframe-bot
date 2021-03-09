@@ -6,5 +6,6 @@ module.exports = {
 			//TODO inv list
             return 'oops';
 		}
-    }
+    },
+    
 }
