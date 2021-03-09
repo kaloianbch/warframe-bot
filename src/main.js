@@ -6,14 +6,19 @@ const warframestatGet = require('./warframestatGet')
 const client = new Discord.Client();
 const wfChannelID = process.env.CHANNEL_ID
 
-client.on('ready', () => {
+let wfState, wfPrevState;
+
+
+client.on('ready', async () => {
     console.log(`Logged in as ${client.user.tag}!`);
+
+    //Initial API data fetch
+    wfState = await warframestatGet.updatePlatformState();
+    wfPrevState = wfState;
+
     client.channels.fetch(wfChannelID)
     .then(channel => {
-        (async function() {
-            let state = await warframestatGet.updatePlatformState();
-            channel.send(state.timestamp);
-        })();
+        channel.send(wfState.timestamp);
     })
 });
 
