@@ -34,7 +34,10 @@ client.on('ready', async () => {
     wfState = await warframeStateGet.getPlatformState();
     //timer to update the API data every minute
     updateTimer = setInterval(function() {
-        wfState = warframeStateGet.getPlatformState();
+        let promise = warframeStateGet.getPlatformState();
+        promise.then((state) => {
+            wfState = state;
+        })
     }, 60000);
 
     wfChannel.send("Cephalon Cord is now online. Greetings Tenno.");
@@ -54,7 +57,7 @@ client.on('message', message => {
         command.execute(message, args, wfState);
     } catch (error) {
         console.error(error);
-        message.reply('Error executing command:', command);
+        message.reply('Error executing command:', commandInput);
     }
 
 });
