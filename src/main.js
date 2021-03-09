@@ -2,7 +2,7 @@ require('dotenv').config()
 const fs = require('fs');
 const Discord = require('discord.js');
 
-const warframestatGet = require('./warframestatGet')
+const warframeStateGet = require('./warframeStateGet.js')
 
 const client = new Discord.Client();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
@@ -31,10 +31,10 @@ client.on('ready', async () => {
     })
 
     //Initial API data fetch
-    wfState = await warframestatGet.getPlatformState();
+    wfState = await warframeStateGet.getPlatformState();
     //timer to update the API data every minute
     updateTimer = setInterval(function() {
-        wfState = warframestatGet.getPlatformState();
+        wfState = warframeStateGet.getPlatformState();
     }, 60000);
 
     wfChannel.send("Cephalon Cord is now online. Greetings Tenno.");
