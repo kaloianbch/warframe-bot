@@ -3,6 +3,8 @@ const fs = require('fs');
 const Discord = require('discord.js');
 
 const warframeStateGet = require('./warframeStateGet.js')
+const watchAlerts = require('./watchAlerts.js')
+
 
 const client = new Discord.Client();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
@@ -38,7 +40,8 @@ client.on('ready', async () => {
         promise.then((state) => {
             wfState = state;
         })
-    }, 60000);
+        watchAlerts.watchCheck(wfChannel);
+    }, 15000);
 
     wfChannel.send("Cephalon Cord is now online. Greetings Tenno.");
 });
@@ -49,7 +52,10 @@ client.on('message', message => {
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandInput = args.shift().toLowerCase();
 
-	if (!client.commands.has(commandInput)) return;
+	if (!client.commands.has(commandInput)) {
+        message.reply('this command is not known to me.');
+        return;
+    }
     
     const command = client.commands.get(commandInput);
 
@@ -57,7 +63,8 @@ client.on('message', message => {
         command.execute(message, args, wfState);
     } catch (error) {
         console.error(error);
-        message.reply('Error executing command:', commandInput);
+        message.channel.send(`I\'ve been thinking, ${message.author}...I thought you\'d want to know.`
+        + `\n(Command Execution Error)`);
     }
 
 });
