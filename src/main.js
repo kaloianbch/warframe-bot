@@ -2,17 +2,15 @@ require('dotenv').config()
 const fs = require('fs');
 const Discord = require('discord.js');
 
-const warframeStateGet = require('./warframeStateGet.js')
+const commons = require('./commons.js')
 const watchAlerts = require('./watchAlerts.js')
-
 
 const client = new Discord.Client();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
 
-let wfChannel;      //discord channel for the bot to interact with
 let wfState;        // var for api data
 let updateTimer;    // ref for interval in order to stop it for restarts
-let prefix = process.env.PREFIX
+let prefix = process.env.PREFIX;
 
 //populate commands list from files in commands folder
 client.commands = new Discord.Collection();
@@ -22,25 +20,23 @@ for (const file of commandFiles) {
 }
 
 // bot init
-client.on('ready', async () => {
+client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
     client.channels.fetch(process.env.CHANNEL_ID)
     .then(channel => {
-        channel.send("Cephalon Cord is booting up. Please hold all queries...");
-        wfChannel = channel;
-    })
-
-    wfState = await warframeStateGet.getPlatformState();    //init API fetch, followed by timer init
-    updateTimer = setInterval(function() {
-        let promise = warframeStateGet.getPlatformState();
+        channel.send("Cephalon Cord is now online. Greetings Tenno.");
+        
+        //timer for !watch updates
+        updateTimer = setInterval(function() {
+        let promise = commons.getWfStatInfo();
         promise.then((state) => {
             wfState = state;
         })
-        watchAlerts.watchCheck(wfChannel);
-    }, 60000);
 
-    wfChannel.send("Cephalon Cord is now online. Greetings Tenno.");
+        watchAlerts.watchCheck(channel);
+    }, 60000);
+    })
 });
 
 //command handler
