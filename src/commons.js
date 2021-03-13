@@ -36,7 +36,6 @@ module.exports = {
     dateTimeMsgFormat : function (ISOdate) {
         let dateTill = new Date(ISOdate);
         let dateCurr = new Date(Date.now());
-        console.log(dateTill.getTime())
         let timeDiff = dateTill.getTime() - Date.now();
 
         if(timeDiff > 86400000){    // more than 24 hours left
