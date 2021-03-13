@@ -16,13 +16,13 @@ module.exports = {
                     });
             
                     response.on('end', () => {
-                        console.log("API fetch resolved for:" + path)
+                        console.log("API fetch resolved for: " + path)
                         let response_body = Buffer.concat(chunks_of_data);
                         resolve(JSON.parse(response_body));
                     });
             
                     response.on('error', (error) => {
-                        console.log('API fetch failed:', error)
+                        console.log('API fetch failed for: ' + path, error)
                         reject(error);
                     });
                 });
