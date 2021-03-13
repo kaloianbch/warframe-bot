@@ -1,4 +1,3 @@
-require('dotenv').config()
 const https = require('https');
 
 let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -8,7 +7,7 @@ module.exports = {
     getWfStatInfo: function (path) {
         try{
             return new Promise((resolve, reject) => {
-                https.get(process.env.API_URL + path, (response) => {
+                https.get(path, (response) => {
                     let chunks_of_data = [];
             
                     response.on('data', (fragments) => {

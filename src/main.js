@@ -37,7 +37,7 @@ bot.on('ready', () => {
         
         //timer for !watch updates
         updateTimer = setInterval(function() {
-        let promise = commons.getWfStatInfo();
+        let promise = commons.getWfStatInfo(process.env.API_URL);
         promise.then((state) => {
             watchAlerts.watchCheck(channel, state);
         })
