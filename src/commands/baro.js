@@ -26,5 +26,5 @@ function baroInvListMsg(data) {
 
 function baroTimeTillMsg(data) {
 
-	return 'Baro Ki\'Teer will arive next ' + commons.dateTimeMsgFormat(data.activation) + ' (' + 'stubTimeDiff' + 'from now) at ' + data.location + '.'
+	return `Baro Ki\'Teer will arive next ${commons.dateTimeMsgFormat(data.activation)} (${'stubTimeDiff'} from now) at ${data.location}.`
 }

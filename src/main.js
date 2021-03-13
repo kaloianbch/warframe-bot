@@ -25,7 +25,7 @@ client.on('ready', () => {
 
     client.channels.fetch(process.env.CHANNEL_ID)
     .then(channel => {
-        channel.send("Cephalon Cord is now online. Greetings Tenno.");
+        channel.send(`Cephalon Cord is now online. Greetings Tenno.`);
         
         //timer for !watch updates
         updateTimer = setInterval(function() {
@@ -47,7 +47,7 @@ client.on('message', message => {
 	const commandInput = args.shift().toLowerCase();
 
 	if (!client.commands.has(commandInput)) {
-        message.reply('this command is not known to me.');
+        message.reply(`the command '${commandInput}' is not known to me.\nUse \`${prefix}help\` to get a list of commands`);
         return;
     }
     
@@ -57,7 +57,7 @@ client.on('message', message => {
         command.execute(message, args, wfState);
     } catch (error) {
         console.error(error);
-        message.channel.send(`I\'ve been thinking, ${message.author}...I thought you\'d want to know.`
+        message.channel.send(`I\'ve been thinking, ${message.author}...I thought you'd want to know.`
         + `\n(Command Execution Error)`);
     }
 

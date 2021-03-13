@@ -16,13 +16,13 @@ module.exports = {
                     });
             
                     response.on('end', () => {
-                        console.log("API fetch resolved for: " + path)
+                        console.log(`API fetch resolved for: ${path}`)
                         let response_body = Buffer.concat(chunks_of_data);
                         resolve(JSON.parse(response_body));
                     });
             
                     response.on('error', (error) => {
-                        console.log('API fetch failed for: ' + path, error)
+                        console.log(`API fetch failed for: ${path}`, error)
                         reject(error);
                     });
                 });
@@ -39,14 +39,14 @@ module.exports = {
         let timeDiff = dateTill.getTime() - Date.now();
 
         if(timeDiff > 86400000){    // more than 24 hours left
-            return 'on ' + dateToString(dateTill) + ' at ' + timeToString(dateTill)
+            return `on ${dateToString(dateTill)} at ${timeToString(dateTill)}`
 
         }
         else{
             if (timeDiff/3600000 + dateCurr.getHours() > 23.0){
-                return 'Tomorrow at ' + timeToString(dateTill)
+                return `tomorrow at ${timeToString(dateTill)}`
             } else {
-                return 'Today at ' + timeToString(dateTill)
+                return `today at ${timeToString(dateTill)}`
             }
         }
     }
@@ -54,10 +54,10 @@ module.exports = {
 
 
 function timeToString (dateTime){
-    return timeAddZero(dateTime.getHours()) + ':' + timeAddZero(dateTime.getMinutes());
+    return `${timeAddZero(dateTime.getHours())}:${timeAddZero(dateTime.getMinutes())}`
 }
 function dateToString (dateTime){
-    return days[dateTime.getDay() - 1] + ' (' + months[dateTime.getMonth()] + ' ' + getOrdinalSuffix(dateTime.getDate() + ')');
+    return `${days[dateTime.getDay() - 1]} (${months[dateTime.getMonth()]} ${getOrdinalSuffix(dateTime.getDate())})`;
 }
 
 function getOrdinalSuffix(num) {
@@ -67,18 +67,18 @@ function getOrdinalSuffix(num) {
     if (teenDigit == 11 
         || teenDigit == 12
         || teenDigit == 13){
-        return num + 'th';
+        return `${num}th`;
     }
 
     switch(lowDigit) {
         case 1:
-            return num + 'st';
+            return `${num}st`;
         case 2:
-            return num + 'nd';
+            return `${num}nd`;
         case 3:
-            return num + 'rd';
+            return `${num}rd`;
         default:
-            return num + 'th';
+            return `${num}th`;
     }
 }
 
@@ -86,6 +86,6 @@ function timeAddZero(num) {
     if (num > 9){
         return num;
     } else{
-        return '0' + num;
+        return `0${num}`;
     }
 }
