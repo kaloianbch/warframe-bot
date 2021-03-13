@@ -49,6 +49,15 @@ module.exports = {
                 return `today at ${timeToString(dateTill)}`
             }
         }
+    },
+
+    timeLeftMsgFormat : function (ISOdate) {
+        let timeDiff = Date.parse(ISOdate) - Date.now();
+        let days = parseInt(timeDiff/86400000);
+        let hours = parseInt((timeDiff - days * 86400000)/3600000);
+        let minutes = parseInt((timeDiff - (days * 86400000 + hours * 3600000))/60000);
+
+        return `${days != 0 ? `${days}d ` : ``}${hours != 0 ? `${hours}h ` : ``}${minutes != 0 ? `${minutes}m` : ``}`
     }
 }
 
