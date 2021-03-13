@@ -9,14 +9,14 @@ module.exports = {
 	execute(message, args) {
 		const data = [];
         const { commands } = message.client;
-        console.log(message.client)
+        console.log(commands)
 
         if (!args.length) {
-            data.push('Here\'s a list of all my commands:');
+            data.push('Here\'s a list of all my commands: ');
             data.push(commands.map(command => command.name).join(', '));
-            data.push(`\nYou can send \`${process.env.PREFIX}help [command name]\` to get info on a specific command!`);
+            data.push(`\nYou can send \`${process.env.PREFIX}help [command name]\` to get info on a specific command.`);
             
-            return message.channel.send(data, { split: true })
+            return message.reply(`\n${data}`, { split: true })
         }
 
         const name = args[0].toLowerCase();
@@ -32,6 +32,6 @@ module.exports = {
         if (command.description) data.push(`**Description:** ${command.description}`);
         if (command.usage) data.push(`**Usage:** ${process.env.PREFIX}${command.name} ${command.usage}`);
 
-        message.channel.send(data, { split: true });
+        return message.reply(`\n${data}`, { split: true })
 	},
 };

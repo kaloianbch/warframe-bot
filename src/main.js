@@ -8,7 +8,6 @@ const watchAlerts = require('./watchAlerts.js')
 const bot = new Discord.Client();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
 
-let wfState;        // var for api data
 let updateTimer;    // ref for interval in order to stop it for restarts
 let prefix = process.env.PREFIX;
 
@@ -34,16 +33,14 @@ bot.on('ready', () => {
 
     bot.channels.fetch(process.env.CHANNEL_ID)
     .then(channel => {
-        channel.send(`Cephalon Cord is now online. Greetings Tenno.`);
+        channel.send(`Cephalon Cord is now online, greetings Tenno.\nFor a list of my commands please use \`${prefix}help\``);
         
         //timer for !watch updates
         updateTimer = setInterval(function() {
         let promise = commons.getWfStatInfo();
         promise.then((state) => {
-            wfState = state;
+            watchAlerts.watchCheck(channel, state);
         })
-
-        watchAlerts.watchCheck(channel);
     }, 60000);
     })
 });

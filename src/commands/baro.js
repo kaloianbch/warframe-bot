@@ -12,9 +12,9 @@ module.exports = {
 		let baroPromise =  commons.getWfStatInfo('\\voidTrader')
 		baroPromise.then((baroInfo) => {
 			if (baroInfo.active){
-				return message.channel.send(baroInvListMsg(baroInfo));
+				return message.reply(`\n${baroInvListMsg(baroInfo)}`);
 			} else{
-				return message.channel.send(baroTimeTillMsg(baroInfo));
+				return message.channel.send(`\n${baroTimeTillMsg(baroInfo)}`);
 			}
 		})
 	},
