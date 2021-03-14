@@ -45,8 +45,10 @@ module.exports = {
 
 		let fissPromise =  commons.getWfStatInfo(config.WFStatApiURL + '/fissures')
 		fissPromise.then((fissData) => {
-			return message.reply(`\nHere are the fissures that match those parameters:` + 
-            fissNotification.notification(fissData, tierArg, missArg, factArg));
+			let filteredReply = fissNotification.notification(fissData, tierArg, missArg, factArg);
+
+            if (filteredReply === null){ return message.reply(`\nNo current fissures meet those parameters`) }
+			return message.reply(`\nHere are the fissures that match those parameters:` + filteredReply);
 		})
 	},
 };
