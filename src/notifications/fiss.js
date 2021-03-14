@@ -16,6 +16,6 @@ module.exports = {
 		}
 
 		return `Here are the fissures that match those parameters:` + 
-		`\n\`${stringTable.create(fissData,{ headers: ['tier', 'node', 'missionType','eta'], capitalizeHeaders: true })}\``
+		`\n\`${stringTable.create(fissData,{ headers: ['tier', 'node', 'missionType','enemy','eta'], capitalizeHeaders: true })}\``
     }
 }

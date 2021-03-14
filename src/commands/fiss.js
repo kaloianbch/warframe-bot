@@ -13,21 +13,20 @@ module.exports = {
 	cooldown: 5,
 
 	execute(message, args) {
-        //TODO - corrupted/void -> orokin
         let tierArg = null, missArg = null, factArg = null;
         for (i in args){
-            for (tier of config.validArgsData.fiss){
-                if (tier == (args[i]) && tierArg == null){ tierArg = args[i] }
+            for (tier in config.validArgsData.fiss){
+                if (tier == (args[i]) && tierArg == null){ tierArg = config.validArgsData.fiss[tier] }
             }
-            for (faction of config.validArgsData.faction){
-                if (faction == (args[i]) && factArg == null){ factArg = args[i] }
+            for (faction in config.validArgsData.faction){
+                if (faction == (args[i]) && factArg == null){ factArg = config.validArgsData.faction[faction] }
             }
-            for (mission of config.validArgsData.mission){
+            for (mission in config.validArgsData.mission){
                 if (i < args.length && mission == (`${args[i]} ${args[parseInt(i) + 1]}`) && missArg == null){ 
-                    missArg = `${args[i]} ${args[parseInt(i) + 1]}`; 
+                    missArg = config.validArgsData.mission[mission]; 
                     i += 1;
                 }
-                else if(mission == (args[i]) && missArg == null){ missArg = args[i] }
+                else if(mission == (args[i]) && missArg == null){missArg = config.validArgsData.mission[mission]}
             }
         }
         console.log(`Fissure args: tier-${tierArg}, mission-${missArg}, faction-${factArg}`)
