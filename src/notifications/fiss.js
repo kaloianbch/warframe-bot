@@ -15,7 +15,6 @@ module.exports = {
 			return `No current fissures meet those parameters`
 		}
 
-		return `Here are the fissures that match those parameters:` + 
-		`\n\`${stringTable.create(fissData,{ headers: ['tier', 'node', 'missionType','enemy','eta'], capitalizeHeaders: true })}\``
+		return `\n\`${stringTable.create(fissData,{ headers: ['tier', 'node', 'missionType','enemy','eta'], capitalizeHeaders: true })}\``
     }
 }

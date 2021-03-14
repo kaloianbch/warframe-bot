@@ -7,7 +7,7 @@ missTypeArgs = ['']
 module.exports = {
 	name: 'fissure',
 	description: 'Provides current list of relic missions either not filtered, or filtered by tier or mission type',
-	aliases: ['fiss', 'relic', 'relics', 'fissures'],
+	aliases: ['fiss', 'fish', 'relic', 'relics', 'fissures'],
 	usage: `${config.prefix}fissure [relic tier] / [mission type] / [faction] (arguments can be in any order)`,
 	example: `${config.prefix}fissure axi, ${config.prefix}fissure rescue, ${config.prefix}fissure mobile defense meso grineer`,
 	cooldown: 5,
@@ -45,7 +45,8 @@ module.exports = {
 
 		let fissPromise =  commons.getWfStatInfo(config.WFStatApiURL + '/fissures')
 		fissPromise.then((fissData) => {
-			return message.reply(`\n${fissNotification.notification(fissData, tierArg, missArg, factArg)}`);
+			return message.reply(`\nHere are the fissures that match those parameters:` + 
+            fissNotification.notification(fissData, tierArg, missArg, factArg));
 		})
 	},
 };
