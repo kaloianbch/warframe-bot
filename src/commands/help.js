@@ -1,4 +1,4 @@
-require('dotenv').config()
+const config = require('../../res/bot-config.json');
 module.exports = {
 	name: 'help',
 	description: 'List all of my commands or info about a specific command.',
@@ -13,7 +13,7 @@ module.exports = {
         if (!args.length) {
             data.push('Here\'s a list of all my commands: ');
             data.push(commands.map(command => command.name).join(', '));
-            data.push(`\nYou can send \`${process.env.PREFIX}help [command name]\` to get info on a specific command.`);
+            data.push(`\nYou can send \`${config.prefix}help [command name]\` to get info on a specific command.`);
             
             return message.reply(`\n${data}`, { split: true })
         }
@@ -29,7 +29,7 @@ module.exports = {
 
         if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(', ')}`);
         if (command.description) data.push(`**Description:** ${command.description}`);
-        if (command.usage) data.push(`**Usage:** ${process.env.PREFIX}${command.name} ${command.usage}`);
+        if (command.usage) data.push(`**Usage:** ${config.prefix}${command.name} ${command.usage}`);
 
         return message.reply(`\n${data}`, { split: true })
 	},

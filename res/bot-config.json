@@ -1,0 +1,12 @@
+{
+	"prefix": "!",
+	"token": "discord bot token here",
+    "WFStatApiURL": "https://api.warframestat.us/pc",
+    "botChannel": "channel id",
+    "emotes": [
+
+    ],
+    "prefMissions": [
+
+    ]
+}

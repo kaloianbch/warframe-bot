@@ -1,15 +1,15 @@
-require('dotenv').config()
 const fs = require('fs');
 const Discord = require('discord.js');
 
 const commons = require('./commons.js')
 const watchAlerts = require('./watchAlerts.js')
+const config = require('../res/bot-config.json');
+
 
 const bot = new Discord.Client();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
 
 let updateTimer;    // ref for interval in order to stop it for restarts
-let prefix = process.env.PREFIX;
 
 bot.commands = new Discord.Collection();
 bot.aliases = new Discord.Collection();
@@ -30,14 +30,13 @@ for (const file of commandFiles) {
 // bot init
 bot.on('ready', () => {
     console.log(`Logged in as ${bot.user.tag}!`);
-
-    bot.channels.fetch(process.env.CHANNEL_ID)
+    bot.channels.fetch(config.botChannel)
     .then(channel => {
-        channel.send(`Cephalon Cord is now online, greetings Tenno.\nFor a list of my commands please use \`${prefix}help\``);
+        channel.send(`${bot.user.username} is now online, greetings Tenno.\nFor a list of my commands please use \`${config.prefix}help\``);
         
         //timer for !watch updates
         updateTimer = setInterval(function() {
-        let promise = commons.getWfStatInfo(process.env.API_URL);
+        let promise = commons.getWfStatInfo(config.WFStatApiURL);
         promise.then((state) => {
             watchAlerts.watchCheck(channel, state);
         })
@@ -47,8 +46,8 @@ bot.on('ready', () => {
 
 //command handler
 bot.on('message', message => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
+	const args = message.content.slice(config.prefix.length).trim().split(/ +/);
 	const commandInput = args.shift().toLowerCase();
     console.log(`command: ${commandInput}, args: ${args}`);
 
@@ -60,7 +59,7 @@ bot.on('message', message => {
     } else if (bot.aliases.has(commandInput)){
         command = bot.aliases.get(commandInput);
     } else{
-        message.reply(`the command '${commandInput}' is not known to me.\nUse \`${prefix}help\` to get a list of commands`);
+        message.reply(`the command '${commandInput}' is not known to me.\nUse \`${config.prefix}help\` to get a list of commands`);
         return;
     }
 
@@ -74,4 +73,4 @@ bot.on('message', message => {
 
 });
 
-bot.login(process.env.TOKEN);
+bot.login(config.token);
