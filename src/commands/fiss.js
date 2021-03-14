@@ -14,20 +14,32 @@ module.exports = {
 
 	execute(message, args) {
         let tierArg = null, missArg = null, factArg = null;
-        for (i in args){
+        for (let i = 0; i < args.length; i++){
+            let isValid = false
             for (tier in config.validArgsData.fiss){
-                if (tier == (args[i]) && tierArg == null){ tierArg = config.validArgsData.fiss[tier] }
+                if (tier == (args[i])){ 
+                    isValid = true; 
+                    if(tierArg == null) { tierArg = config.validArgsData.fiss[tier] }
+                }
             }
             for (faction in config.validArgsData.faction){
-                if (faction == (args[i]) && factArg == null){ factArg = config.validArgsData.faction[faction] }
+                if (faction == (args[i]) && factArg == null){
+                    isValid = true; 
+                    if(factArg == null) { factArg = config.validArgsData.faction[faction] }
+                }
             }
             for (mission in config.validArgsData.mission){
-                if (i < args.length && mission == (`${args[i]} ${args[parseInt(i) + 1]}`) && missArg == null){ 
-                    missArg = config.validArgsData.mission[mission]; 
-                    i += 1;
+                if (i < args.length && mission == (`${args[i]} ${args[i + 1]}`)){ 
+                    i++;
+                    isValid = true; 
+                    if(missArg == null) { missArg = config.validArgsData.mission[mission] }
                 }
-                else if(mission == (args[i]) && missArg == null){missArg = config.validArgsData.mission[mission]}
+                else if(mission == (args[i])){
+                    isValid = true; 
+                    if(missArg == null) { missArg = config.validArgsData.mission[mission] }
+                }
             }
+            if(!isValid){message.reply(`\nthe argument '${args[i]}' is unknown. I will search without it.`)}
         }
         console.log(`Fissure args: tier-${tierArg}, mission-${missArg}, faction-${factArg}`)
 
