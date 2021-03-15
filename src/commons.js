@@ -1,7 +1,6 @@
 const https = require('https');
 
-let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+const config = require('../res/bot-config.json');
 
 module.exports = {
     getWfStatInfo: function (path) {
@@ -67,14 +66,41 @@ module.exports = {
         let seconds = parseInt((timeDiff - (days * 86400000 + hours * 3600000 + minutes *60000))/1000);
 
         return `${days != 0 ? `${days}d ` : ``}${hours != 0 ? `${hours}h ` : ``}${minutes != 0 ? `${minutes}m` : ``}${seconds != 0 ? `${seconds}s` : ``}`
+    },
+
+    valiateArgs: function (args, validArgTypes){
+        let returnArgs = {}
+        for (let i = 0; i < args.length; i++){
+            for (argType of validArgTypes){ 
+                for (validArg in config.validArgsData[argType]){
+                    if (i < args.length - 1 && validArg == (`${args[i]} ${args[i + 1]} ${args[i + 2]}`)){ 
+                        i += 2;
+                        if(returnArgs[argType] === undefined){returnArgs[argType] = config.validArgsData[argType][validArg]}
+                    }
+                    if (i < args.length && validArg == (`${args[i]} ${args[i + 1]}`)){ 
+                        i++;
+                        if(returnArgs[argType] === undefined){returnArgs[argType] = config.validArgsData[argType][validArg]}
+                    }
+                    else if(validArg == (args[i])){
+                        if(returnArgs[argType] === undefined){returnArgs[argType] = config.validArgsData[argType][validArg]}
+                    }
+                }   
+            }
+        }
+        return returnArgs;
+
     }
 }
 
 
 function timeToString (dateTime){
+    
     return `${timeAddZero(dateTime.getHours())}:${timeAddZero(dateTime.getMinutes())}`
 }
 function dateToString (dateTime){
+    let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
     return `${days[dateTime.getDay() - 1]} (${months[dateTime.getMonth()]} ${getOrdinalSuffix(dateTime.getDate())})`;
 }
 
