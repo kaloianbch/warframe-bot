@@ -69,23 +69,36 @@ module.exports = {
     },
 
     valiateArgs: function (args, validArgTypes){
-        let returnArgs = {}
+        let returnArgs = {valid:{},invalid:[]}
         for (let i = 0; i < args.length; i++){
+            let argIsValid = false
             for (argType of validArgTypes){ 
                 for (validArg in config.validArgsData[argType]){
                     if (i < args.length - 1 && validArg == (`${args[i]} ${args[i + 1]} ${args[i + 2]}`)){ 
                         i += 2;
-                        if(returnArgs[argType] === undefined){returnArgs[argType] = config.validArgsData[argType][validArg]}
+                        argIsValid = true
+                        if(returnArgs.valid[argType] === undefined){
+                            returnArgs.valid[argType] = config.validArgsData[argType][validArg]
+                        }
                     }
                     if (i < args.length && validArg == (`${args[i]} ${args[i + 1]}`)){ 
                         i++;
-                        if(returnArgs[argType] === undefined){returnArgs[argType] = config.validArgsData[argType][validArg]}
+                        argIsValid = true
+                        if(returnArgs.valid[argType] === undefined){
+                            returnArgs.valid[argType] = config.validArgsData[argType][validArg]
+                        }
                     }
                     else if(validArg == (args[i])){
-                        if(returnArgs[argType] === undefined){returnArgs[argType] = config.validArgsData[argType][validArg]}
+                        argIsValid = true
+                        if(returnArgs.valid[argType] === undefined){
+                            returnArgs.valid[argType] = config.validArgsData[argType][validArg]
+                        }
                     }
-                }   
+                }
             }
+            if(!argIsValid){
+                returnArgs.invalid.push(args[i])
+            }   
         }
         return returnArgs;
 
