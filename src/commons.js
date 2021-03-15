@@ -68,30 +68,30 @@ module.exports = {
         return `${days != 0 ? `${days}d ` : ``}${hours != 0 ? `${hours}h ` : ``}${minutes != 0 ? `${minutes}m` : ``}${seconds != 0 ? `${seconds}s` : ``}`
     },
 
-    valiateArgs: function (args, validArgTypes){
+    valiateArgs: function (args, validArgTypes, validArgsList){
         let returnArgs = {valid:{},invalid:[]}
         for (let i = 0; i < args.length; i++){
             let argIsValid = false
             for (argType of validArgTypes){ 
-                for (validArg in config.validArgsData[argType]){
+                for (validArg in validArgsList[argType]){
                     if (i < args.length - 1 && validArg == (`${args[i]} ${args[i + 1]} ${args[i + 2]}`)){ 
                         i += 2;
                         argIsValid = true
                         if(returnArgs.valid[argType] === undefined){
-                            returnArgs.valid[argType] = config.validArgsData[argType][validArg]
+                            returnArgs.valid[argType] = validArgsList[argType][validArg]
                         }
                     }
                     if (i < args.length && validArg == (`${args[i]} ${args[i + 1]}`)){ 
                         i++;
                         argIsValid = true
                         if(returnArgs.valid[argType] === undefined){
-                            returnArgs.valid[argType] = config.validArgsData[argType][validArg]
+                            returnArgs.valid[argType] = validArgsList[argType][validArg]
                         }
                     }
                     else if(validArg == (args[i])){
                         argIsValid = true
                         if(returnArgs.valid[argType] === undefined){
-                            returnArgs.valid[argType] = config.validArgsData[argType][validArg]
+                            returnArgs.valid[argType] = validArgsList[argType][validArg]
                         }
                     }
                 }

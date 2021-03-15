@@ -15,7 +15,7 @@ module.exports = {
     validArgs: ['fiss', 'faction', 'mission'],
 
 	execute(message, args) {
-        let argsFound = commons.valiateArgs(args,this.validArgs);
+        let argsFound = commons.valiateArgs(args, this.validArgs, config.validArgsData);
         if(argsFound.invalid.length){message.reply(`\nthe argument(s) '${argsFound.invalid}' are unknown. I will search without them.`)}
 
         console.log(`Fissure args: tier-${argsFound.valid.fiss}, mission-${argsFound.valid.mission}, faction-${argsFound.valid.faction}`)

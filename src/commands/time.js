@@ -14,7 +14,7 @@ module.exports = {
         if (!args.length) {
             return message.reply(`\nYou need to specify a location. Please look at \`${config.prefix}help time\` for more information.`)
         }
-        let argsFound = commons.valiateArgs(args,this.validArgs);
+        let argsFound = commons.valiateArgs(args, this.validArgs, config.validArgsData);
         if(argsFound.invalid.length){
             return message.reply(`\nthe argument(s) '${argsFound.invalid}' are unknown. Please look at \`${config.prefix}help time\` for more information.`)
         }

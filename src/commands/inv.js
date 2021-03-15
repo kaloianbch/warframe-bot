@@ -13,7 +13,7 @@ module.exports = {
     validArgs: ['faction', 'invReward'],
 
 	execute(message, args) {
-        let argsFound = commons.valiateArgs(args,this.validArgs);
+        let argsFound = commons.valiateArgs(args, this.validArgs, config.validArgsData);
         if(argsFound.invalid.length){message.reply(`\nthe argument(s) '${argsFound.invalid}' are unknown. I will search without them.`)}
 
         console.log(`Invasion args: reward-${argsFound.valid.invReward}, faction-${argsFound.valid.faction}`)
