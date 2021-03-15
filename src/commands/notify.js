@@ -1,4 +1,7 @@
+const fs = require('fs');
+
 const config = require('../../res/bot-config.json');
+
 module.exports = {
 	name: 'notify',
 	description: '',
@@ -7,20 +10,14 @@ module.exports = {
 	cooldown: 5,
 
 	execute(message, args) {
-		return message.author.send(`\n${'boop'}`).then(msg => {
-			const filter = (reaction, user) => {
-				return config.emotes.test.includes(reaction.emoji.name) && user.id === message.author.id;
-			};
-
-			msg.react("👍").then(() => { 
-				msg.react("👎");
-			});
-
-			msg.awaitReactions(filter, {max: 1}).then(data => {
-				console.log(data);
-			})
-		});
-
-		
+		if (!args.length) {
+            //send dm form
+        }
+		let notificationTypes = []
+		for (const file of fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'))) {
+			const type = require(`./${file}`);
+			notificationTypes.push(type);
+		}
+		console.log(notificationTypes)
 	},
 };

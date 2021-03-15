@@ -1,6 +1,7 @@
+const stringTable = require('string-table');
+
 const config = require('../../res/bot-config.json');
 const commons = require('../commons.js')
-const fissNotification = require('../notifications/fiss.js')
 
 tierArgs = ['lith', 'meso', 'neo', 'axi', 'requem']
 missTypeArgs = ['']
@@ -45,10 +46,25 @@ module.exports = {
 
 		let fissPromise =  commons.getWfStatInfo(config.WFStatApiURL + '/fissures')
 		fissPromise.then((fissData) => {
-			let filteredReply = fissNotification.notification(fissData, tierArg, missArg, factArg);
+			let filteredReply = this.notification(fissData, tierArg, missArg, factArg);
 
             if (filteredReply === null){ return message.reply(`\nNo current fissures meet those parameters`) }
 			return message.reply(`\nHere are the fissures that match those parameters:` + filteredReply);
 		})
 	},
+
+    notification: function(fissData, tier, mission, faction){
+        for(let i = fissData.length - 1; i >= 0; i--){
+			if(tier != null && tier != String(fissData[i].tier).toLowerCase()
+			|| mission != null && mission != String(fissData[i].missionType).toLowerCase()
+			|| faction != null && faction != String(fissData[i].enemy).toLowerCase()){
+				fissData.splice(i, 1)
+			}
+		}
+		if(!Object.keys(fissData).length){
+			return null
+		}
+
+		return `\n\`${stringTable.create(fissData,{ headers: ['tier', 'node', 'missionType','enemy','eta'], capitalizeHeaders: true })}\``
+    }
 };

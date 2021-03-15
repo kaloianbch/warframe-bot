@@ -1,6 +1,7 @@
+const stringTable = require('string-table');
+
 const config = require('../../res/bot-config.json');
 const commons = require('../commons.js')
-const sortieNotification = require('../notifications/sortie.js')
 
 
 module.exports = {
@@ -14,7 +15,12 @@ module.exports = {
         let sortiePromise =  commons.getWfStatInfo(config.WFStatApiURL + '/sortie')
 		sortiePromise.then((sortieData) => {
             return message.reply(`\nThe current sortie is:**\n${sortieData.boss}** (**${sortieData.faction}**) with ` + 
-            `**${commons.timeLeftMsgFormat(sortieData.expiry)}** left till it expires.\nHere are the missions:${sortieNotification.notification(sortieData)}`)
+            `**${commons.timeLeftMsgFormat(sortieData.expiry)}** left till it expires.\nHere are the missions:${this.notification(sortieData)}`)
         });
 	},
+
+	
+    notification: function(sortieData){
+		return `\n\`${stringTable.create(sortieData.variants,{ headers: ['node', 'missionType', 'modifier', 'modifierDescription'], capitalizeHeaders: true })}\``
+    }
 };
