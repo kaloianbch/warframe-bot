@@ -47,7 +47,7 @@ bot.on('ready', () => {
 //command handler
 bot.on('message', message => {
 	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
-	const args = message.content.slice(config.prefix.length).trim().split(/ +/);
+	const args = message.content.slice(config.prefix.length).trim().split(/ +/).map(arg => arg.toLowerCase());
 	const commandInput = args.shift().toLowerCase();
     console.log(`command: ${commandInput}, args: ${args}`);
 
