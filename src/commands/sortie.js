@@ -13,8 +13,8 @@ module.exports = {
 	execute(message, args) {
         let sortiePromise =  commons.getWfStatInfo(config.WFStatApiURL + '/sortie')
 		sortiePromise.then((sortieData) => {
-            return message.reply(`\nThe current sortie is:\n${sortieData.boss} (${sortieData.faction}) with ` + 
-            `${commons.timeLeftMsgFormat(sortieData.expiry)} left till it expires. Here are the missions:${sortieNotification.notification(sortieData)}`)
+            return message.reply(`\nThe current sortie is:**\n${sortieData.boss}** (**${sortieData.faction}**) with ` + 
+            `**${commons.timeLeftMsgFormat(sortieData.expiry)}** left till it expires.\nHere are the missions:${sortieNotification.notification(sortieData)}`)
         });
 	},
 };
