@@ -12,10 +12,9 @@ module.exports = {
 			}
 		}
 		if(!Object.keys(fissData).length){
-			return `No current fissures meet those parameters`
+			return null
 		}
 
-		return `Here are the fissures that match those parameters:` + 
-		`\n\`${stringTable.create(fissData,{ headers: ['tier', 'node', 'missionType','eta'], capitalizeHeaders: true })}\``
+		return `\n\`${stringTable.create(fissData,{ headers: ['tier', 'node', 'missionType','enemy','eta'], capitalizeHeaders: true })}\``
     }
 }
