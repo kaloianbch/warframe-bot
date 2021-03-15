@@ -12,8 +12,7 @@ module.exports = {
 	cooldown: 5,
 
 	execute(message, args) {
-        let sortiePromise =  commons.getWfStatInfo(config.WFStatApiURL + '/sortie')
-		sortiePromise.then((sortieData) => {
+       commons.getWfStatInfo(config.WFStatApiURL + '/sortie').then((sortieData) => {
             return message.reply(`\nThe current sortie is:**\n${sortieData.boss}** (**${sortieData.faction}**) with ` + 
             `**${commons.timeLeftMsgFormat(sortieData.expiry)}** left till it expires.\nHere are the missions:${this.notification(sortieData)}`)
         });

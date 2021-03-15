@@ -12,8 +12,7 @@ module.exports = {
 	cooldown: 5,
 
 	execute(message, args) {
-		let baroPromise =  commons.getWfStatInfo(config.WFStatApiURL + '/voidTrader')
-		baroPromise.then((baroData) => {
+		commons.getWfStatInfo(config.WFStatApiURL + '/voidTrader').then((baroData) => {
 			return message.reply(`\n${this.notification(baroData)}`);
 		})
 	},
