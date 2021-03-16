@@ -127,8 +127,8 @@ function listNotification(message){
 		for (i in userData){
 			reply.push(`\ncommand: ${userData[i].command} args: ${JSON.stringify(userData[i].args)}`)
 		}
-		console.log(reply)
-		return message.reply(`Here's a list of your current notifications:${reply}`,{split: true})
+		message.author.send(`Here's a list of your current notifications:${reply}`,{split: true})
+		return message.reply(`I have sent you a list in your DMs`)
 	});
 }
 
