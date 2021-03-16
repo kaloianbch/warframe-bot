@@ -17,6 +17,7 @@ module.exports = {
 		})
 	},
 	notification: function(baroData, args, lastCheckedDate){
+		console.log(`Baro args: lastchecked-${lastCheckedDate}`)
         if (baroData.active){
             return baroInvListMsg(baroData);
         } else{

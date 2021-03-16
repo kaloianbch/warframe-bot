@@ -18,8 +18,6 @@ module.exports = {
         let argsFound = commons.valiateArgs(args, this.validArgs, config.validArgsData);
         if(argsFound.invalid.length){message.reply(`\nthe argument(s) '${argsFound.invalid}' are unknown. I will search without them.`)}
 
-        console.log(`Fissure args: tier-${argsFound.valid.fiss}, mission-${argsFound.valid.mission}, faction-${argsFound.valid.faction}`)
-
 		commons.getWfStatInfo(config.WFStatApiURL + '/fissures').then((fissData) => {
 			let filteredReply = this.notification(fissData, argsFound.valid);
 
@@ -29,6 +27,8 @@ module.exports = {
 	},
 
     notification: function(fissData, args, lastCheckedDate){
+		console.log(`Fissure args: tier-${args.fiss}, mission-${args.mission}, faction-${args.faction}, lastchecked-${lastCheckedDate}`)
+
 		let printData = []
         for(i in fissData){ //TODO - cleaner, generic args check
 			if((lastCheckedDate === undefined || (lastCheckedDate < Date.parse(fissData.activation) && Date.parse(fissData.activation) < Date.now))

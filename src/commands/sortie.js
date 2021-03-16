@@ -20,6 +20,7 @@ module.exports = {
 
 	
     notification: function(sortieData, args, lastCheckedDate){
+		console.log(`Sortie args: lastchecked-${lastCheckedDate}`)
 		if(lastCheckedDate === undefined || (lastCheckedDate < Date.parse(fissData.activation) && Date.parse(fissData.activation) < Date.now)) {
 			return `\n\`${stringTable.create(sortieData.variants,{
 				headers: ['node', 'missionType', 'modifier', 'modifierDescription'], capitalizeHeaders: true 

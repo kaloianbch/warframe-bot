@@ -16,7 +16,6 @@ module.exports = {
         let argsFound = commons.valiateArgs(args, this.validArgs, config.validArgsData);
         if(argsFound.invalid.length){message.reply(`\nthe argument(s) '${argsFound.invalid}' are unknown. I will search without them.`)}
 
-        console.log(`Invasion args: reward-${argsFound.valid.invReward}, faction-${argsFound.valid.faction}`)
 		commons.getWfStatInfo(config.WFStatApiURL + '/invasions').then((invData) => {
             //TODO - over 2000 char coverage
 			let filteredReply = this.notification(invData, argsFound.valid);
@@ -27,6 +26,7 @@ module.exports = {
 	},
 
     notification: function(invData, args, lastCheckedDate){
+        console.log(`Invasion args: reward-${args.invReward}, faction-${args.faction}, lastchecked-${lastCheckedDate}`)
         let printData = []
         for(let i = invData.length - 1; i >= 0; i--){
         
