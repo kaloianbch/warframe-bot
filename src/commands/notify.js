@@ -1,4 +1,5 @@
 const fs = require('fs');
+const readline = require('readline');
 
 const commons = require('../commons.js')
 const config = require('../../res/bot-config.json');
@@ -49,13 +50,14 @@ module.exports = {
 
 		let argsFound;
 		switch(notifyCommand.name) {
-			case('notify'):	//TODO - something special
-				return message.channel.send(`\`ha ha\``)
+			case('notify'):
+				return hellNotification(message)
 
 			case('time'):
 				return timeNotification(message, notifyCommand, args)
+
 			case('help'):
-				return message.reply('maybe some other time')
+				return message.reply(`don't test me`)
 
 			case('list'):
 				return listNotification(message);
@@ -128,7 +130,19 @@ function listNotification(message){
 		console.log(reply)
 		return message.reply(`Here's a list of your current notifications:${reply}`,{split: true})
 	});
-	return true; 
+}
+
+function hellNotification(message){
+	const rl = readline.createInterface({
+		input: fs.createReadStream('./res/sus.txt'),
+		output: process.stdout,
+		terminal: false
+	});
+	
+	rl.on('line', (line) => {
+		if(line.trim() !== ''){message.channel.send(line)}
+	});
+	return true;
 }
 
 function addNotification(userId, commandName, commandArgs){
