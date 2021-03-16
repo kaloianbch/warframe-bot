@@ -16,10 +16,13 @@ module.exports = {
 			return message.reply(`\n${this.notification(baroData)}`);
 		})
 	},
-	notification: function(baroData){
+	notification: function(baroData, args, lastCheckedDate){
         if (baroData.active){
             return baroInvListMsg(baroData);
         } else{
+			if(lastCheckedDate !== undefined){
+				return null;
+			}
             return baroTimeTillMsg(baroData);
         }
     }

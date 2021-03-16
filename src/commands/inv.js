@@ -19,22 +19,24 @@ module.exports = {
         console.log(`Invasion args: reward-${argsFound.valid.invReward}, faction-${argsFound.valid.faction}`)
 		commons.getWfStatInfo(config.WFStatApiURL + '/invasions').then((invData) => {
             //TODO - over 2000 char coverage
-			let filteredReply = this.notification(invData, argsFound.valid.invReward, argsFound.valid.faction);
+			let filteredReply = this.notification(invData, argsFound.valid);
 
             if (filteredReply === null){ return message.reply(`\nNo current invasions meet those parameters`) }
 			return message.reply(`\nHere are the invasions that match those parameters:` + filteredReply);
 		})
 	},
 
-    notification: function(invData, reward, faction){
+    notification: function(invData, args, lastCheckedDate){
         let printData = []
         for(let i = invData.length - 1; i >= 0; i--){
         
 			if(!invData[i].completed 
-                && (reward == null || String(invData[i].attacker.reward.itemString).toLowerCase().includes(reward) 
-                || String(invData[i].defender.reward.itemString).toLowerCase().includes(reward))
-                && (faction == null || String(invData[i].attackingFaction).toLowerCase().includes(faction) 
-                || (String(invData[i].defendingFaction).toLowerCase().includes(faction) && !invData[i].vsInfestation))){
+                && (lastCheckedDate === undefined 
+                    || (lastCheckedDate < Date.parse(fissData.activation) && Date.parse(fissData.activation) < Date.now))
+                && (args.invReward == null || String(invData[i].attacker.reward.itemString).toLowerCase().includes(args.invReward)
+                    || String(invData[i].defender.reward.itemString).toLowerCase().includes(args.invReward))
+                && (args.faction == null || String(invData[i].attackingFaction).toLowerCase().includes(args.faction) 
+                    || (String(invData[i].defendingFaction).toLowerCase().includes(args.faction) && !invData[i].vsInfestation))){
 				printData.push({
                     "node": invData[i].node,
                     "description": invData[i].desc,

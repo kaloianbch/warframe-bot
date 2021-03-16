@@ -19,7 +19,12 @@ module.exports = {
 	},
 
 	
-    notification: function(sortieData){
-		return `\n\`${stringTable.create(sortieData.variants,{ headers: ['node', 'missionType', 'modifier', 'modifierDescription'], capitalizeHeaders: true })}\``
+    notification: function(sortieData, args, lastCheckedDate){
+		if(lastCheckedDate === undefined || (lastCheckedDate < Date.parse(fissData.activation) && Date.parse(fissData.activation) < Date.now)) {
+			return `\n\`${stringTable.create(sortieData.variants,{
+				headers: ['node', 'missionType', 'modifier', 'modifierDescription'], capitalizeHeaders: true 
+			})}\``;
+		}
+		return null;
     }
 };

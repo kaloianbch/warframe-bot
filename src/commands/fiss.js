@@ -21,25 +21,27 @@ module.exports = {
         console.log(`Fissure args: tier-${argsFound.valid.fiss}, mission-${argsFound.valid.mission}, faction-${argsFound.valid.faction}`)
 
 		commons.getWfStatInfo(config.WFStatApiURL + '/fissures').then((fissData) => {
-			let filteredReply = this.notification(fissData, argsFound.valid.fiss, argsFound.valid.mission, argsFound.valid.faction);
+			let filteredReply = this.notification(fissData, argsFound.valid);
 
             if (filteredReply === null){ return message.reply(`\nNo current fissures meet those parameters`) }
 			return message.reply(`\nHere are the fissures that match those parameters:` + filteredReply);
 		})
 	},
 
-    notification: function(fissData, tier, mission, faction){
-        for(let i = fissData.length - 1; i >= 0; i--){
-			if(tier != null && tier != String(fissData[i].tier).toLowerCase()
-			|| mission != null && mission != String(fissData[i].missionType).toLowerCase()
-			|| faction != null && faction != String(fissData[i].enemy).toLowerCase()){
-				fissData.splice(i, 1)
+    notification: function(fissData, args, lastCheckedDate){
+		let printData = []
+        for(i in fissData){ //TODO - cleaner, generic args check
+			if((lastCheckedDate === undefined || (lastCheckedDate < Date.parse(fissData.activation) && Date.parse(fissData.activation) < Date.now))
+			&& (args.fiss === undefined || String(fissData[i].tier).toLowerCase().includes(args.fiss)) 
+			&& (args.mission === undefined || String(fissData[i].missionType).toLowerCase().includes(args.mission))
+			&& (args.faction === undefined || String(fissData[i].enemy).toLowerCase().includes(args.faction))){
+				printData.push(fissData[i]);
 			}
 		}
-		if(!Object.keys(fissData).length){
+		if(!Object.keys(printData).length){
 			return null
 		}
 
-		return `\n\`${stringTable.create(fissData,{ headers: ['tier', 'node', 'missionType','enemy','eta'], capitalizeHeaders: true })}\``
+		return `\n\`${stringTable.create(printData,{ headers: ['tier', 'node', 'missionType','enemy','eta'], capitalizeHeaders: true })}\``
     }
 };
