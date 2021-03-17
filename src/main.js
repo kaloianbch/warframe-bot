@@ -2,14 +2,15 @@ const fs = require('fs');
 const Discord = require('discord.js');
 
 const commons = require('./commons.js')
-const watchAlerts = require('./watchAlerts.js')
+const watch = require('./watch.js')
 const config = require('../res/bot-config.json');
 
 
 const bot = new Discord.Client();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
 
-let updateTimer;    // ref for interval in order to stop it for restarts
+let watchTimer;    // ref for interval in order to stop it for restarts
+let lastWatch = Date.now()
 
 bot.commands = new Discord.Collection();
 bot.aliases = new Discord.Collection();
@@ -35,11 +36,9 @@ bot.on('ready', () => {
         channel.send(`${bot.user.username} is now online, greetings Tenno.\nFor a list of my commands please use \`${config.prefix}help\``);
         
         //timer for !watch updates
-        updateTimer = setInterval(function() {
-        let promise = commons.getWfStatInfo(config.WFStatApiURL);
-        promise.then((state) => {
-            watchAlerts.watchCheck(channel, state);
-        })
+        watchTimer = setInterval(async function() {
+            watch.watchCheck(channel, bot, lastWatch);
+            lastWatch = Date.now()// needs to await watchCheck
     }, 60000);
     })
 });
