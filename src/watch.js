@@ -21,12 +21,13 @@ module.exports = {
 
         commons.getWfStatInfo(config.WFStatApiURL).then((state) => {
             console.log('fetch time: ' + new Date(state.timestamp));
-            let subNotStr;
 
             for (sub of subList){
+                let subNotStr;
                 for (entry of sub.subData){
                     switch(entry.command) {
                         case('baro'):
+                            subNotStr = notifyWrapper(entry.command, state.voidTrader, entry.args,  bot)
                         break;
     
                         case('fissure'):
@@ -34,9 +35,11 @@ module.exports = {
                         break;
     
                         case('invasion'):
+                            subNotStr = notifyWrapper(entry.command, state.invasions, entry.args,  bot)
                         break;
     
                         case('sortie'):
+                            subNotStr = notifyWrapper(entry.command, state.sortie, entry.args,  bot)
                         break;
     
                         case('time'):
@@ -44,22 +47,23 @@ module.exports = {
                         break;
                         
                         default:
+                            subNotStr = null;
                         break;  
                     }
+                }
+
+                if(subNotStr !== null){
+                    bot.users.fetch(sub.userID).then(function(user) {
+                        try{
+                            user.send(`Notification for you opperator:\n${subNotStr}`)
+                        } catch(error){
+                            channel.send(`Failed to send a DM to ${user}. Have you enabled DMs?`)
+                        }
+                    });
                 }
             }
             
             bot.lastWatch = Date.parse(state.timestamp)
-
-            if(subNotStr !== null){
-                bot.users.fetch(subList[0].userID).then(function(user) {
-                    try{
-                        user.send(`Notification for you opperator:\n${subNotStr}`)
-                    } catch(error){
-                        channel.send(`Failed to send a DM to ${user}. Have you enabled DMs?`)
-                    }
-                });
-            }
         })
     }
 }
