@@ -5,7 +5,7 @@ const config = require('../res/bot-config.json');
 module.exports = {
     getWfStatInfo: function (path) {
         try{
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {//TODO - wrapper with handler for rejections
                 https.get(path, (response) => {
                     let chunks_of_data = [];
             
