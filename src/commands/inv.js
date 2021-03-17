@@ -28,12 +28,11 @@ module.exports = {
     notification: function(invData, args, lastCheckedDate){
         console.log(`Invasion args: reward-${args.invReward}, faction-${args.faction}, lastchecked-${lastCheckedDate}`)
         let printData = []
-        let now = Date.now()
         for(let i = invData.length - 1; i >= 0; i--){
         
 			if(!invData[i].completed 
                 && (lastCheckedDate === undefined 
-                    || (lastCheckedDate <= Date.parse(invData[i].activation) && Date.parse(invData[i].activation) <= now))
+                    || (lastCheckedDate <= Date.parse(invData[i].activation)))
                 && (args.invReward == null || String(invData[i].attacker.reward.itemString).toLowerCase().includes(args.invReward)
                     || String(invData[i].defender.reward.itemString).toLowerCase().includes(args.invReward))
                 && (args.faction == null || String(invData[i].attackingFaction).toLowerCase().includes(args.faction) 

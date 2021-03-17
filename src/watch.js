@@ -19,62 +19,54 @@ module.exports = {
             }
 		}
 
-        console.log('Watch check at:' + Date.now())
-
         commons.getWfStatInfo(config.WFStatApiURL).then((state) => {
-            let newCheck = Date.now();
-            for (i in subList){
-                let userID = subList[i].userID  //TODO - figure out why it breaks without this
+            console.log('fetch time: ' + new Date(state.timestamp));
+            let subNotStr;
 
-                for(notice of subList[i].subData){
-                    let notifyData;
-                    let command = bot.commands.get(notice.command);
-                    switch(command.name) {
+            for (sub of subList){
+                for (entry of sub.subData){
+                    switch(entry.command) {
                         case('baro'):
-                            notifyData = notifyWrapper(command, state.voidTrader, notice.args,  bot.lastWatch)
                         break;
     
                         case('fissure'):
-                            notifyData = notifyWrapper(command, state.fissures, notice.args,  bot.lastWatch)
+                            subNotStr = notifyWrapper(entry.command, state.fissures, entry.args,  bot)
                         break;
     
                         case('invasion'):
-                            notifyData = notifyWrapper(command, state.invasions, notice.args,  bot.lastWatch)
                         break;
     
                         case('sortie'):
-                            notifyData = notifyWrapper(command, state.sortie, notice.args,  bot.lastWatch)
                         break;
     
                         case('time'):
                             //TODO
-                            notifyData = null;
                         break;
                         
                         default:
-                            notifyData = null;
                         break;  
-                    }    
-                    if(notifyData !== null){
-                        console.log(`found ${JSON.stringify(notifyData)} for ${userID}`)
-                        bot.users.fetch(userID).then(function(user) {
-                            try{
-                                user.send(`Notification for you opperator:\n${notifyData}`)
-                            } catch(error){
-                                channel.send(`Failed to send a DM to ${user}. Have you enabled DMs?`)
-                            }
-                        });
                     }
                 }
             }
-            bot.lastWatch = newCheck;
+            
+            bot.lastWatch = Date.parse(state.timestamp)
+
+            if(subNotStr !== null){
+                bot.users.fetch(subList[0].userID).then(function(user) {
+                    try{
+                        user.send(`Notification for you opperator:\n${subNotStr}`)
+                    } catch(error){
+                        channel.send(`Failed to send a DM to ${user}. Have you enabled DMs?`)
+                    }
+                });
+            }
         })
     }
 }
 
-function notifyWrapper(command, data, args, lastWatch){
+function notifyWrapper(command, data, args, bot){
     try {
-        return command.notification(data, args, lastWatch);
+        return  bot.commands.get(command).notification(data, args, bot.lastWatch);
     } catch (error) {
         console.error(error);
         return null;

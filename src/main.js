@@ -13,7 +13,7 @@ let watchTimer;    // ref for interval in order to stop it for restarts
 
 bot.commands = new Discord.Collection();
 bot.aliases = new Discord.Collection();
-bot.lastWatch = Date.now();
+bot.lastWatch = Date.now() - config.updateTick;
 
 //populate commands list from files in commands folder
 for (const file of commandFiles) {
@@ -34,12 +34,13 @@ bot.on('ready', () => {
     bot.channels.fetch(config.botChannel)
     .then(channel => {
         channel.send(`${bot.user.username} is now online, greetings Tenno.\nFor a list of my commands please use \`${config.prefix}help\``);
-        //init check
-        watch.watchCheck(channel, bot);
+
+
         //timer for !watch updates
-        watchTimer = setInterval(async function() {
+        watchTimer = setInterval(function() {
             watch.watchCheck(channel, bot);
-    }, 60000);
+        }, config.updateTick);
+
     })
 });
 
