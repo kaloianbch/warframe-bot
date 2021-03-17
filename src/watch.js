@@ -4,7 +4,7 @@ const commons = require('./commons.js')
 const config = require('../res/bot-config.json');
 
 module.exports = {
-    watchCheck: function (channel, bot, lastWatch) {
+    watchCheck: function (channel, bot) {
         let subList = [];
 
 		for (const file of fs.readdirSync('./res/subs').filter(file => file.endsWith('.json'))) {
@@ -18,7 +18,11 @@ module.exports = {
                 console.error(error)
             }
 		}
+
+        console.log('Watch check at:' + Date.now())
+
         commons.getWfStatInfo(config.WFStatApiURL).then((state) => {
+            let newCheck = Date.now();
             for (i in subList){
                 let userID = subList[i].userID  //TODO - figure out why it breaks without this
 
@@ -27,19 +31,19 @@ module.exports = {
                     let command = bot.commands.get(notice.command);
                     switch(command.name) {
                         case('baro'):
-                            notifyData = notifyWrapper(command, state.voidTrader, notice.args, lastWatch)
+                            notifyData = notifyWrapper(command, state.voidTrader, notice.args,  bot.lastWatch)
                         break;
     
                         case('fissure'):
-                            notifyData = notifyWrapper(command, state.fissures, notice.args, lastWatch)
+                            notifyData = notifyWrapper(command, state.fissures, notice.args,  bot.lastWatch)
                         break;
     
                         case('invasion'):
-                            notifyData = notifyWrapper(command, state.invasions, notice.args, lastWatch)
+                            notifyData = notifyWrapper(command, state.invasions, notice.args,  bot.lastWatch)
                         break;
     
                         case('sortie'):
-                            notifyData = notifyWrapper(command, state.sortie, notice.args, lastWatch)
+                            notifyData = notifyWrapper(command, state.sortie, notice.args,  bot.lastWatch)
                         break;
     
                         case('time'):
@@ -63,6 +67,7 @@ module.exports = {
                     }
                 }
             }
+            bot.lastWatch = newCheck;
         })
     }
 }

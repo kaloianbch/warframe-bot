@@ -10,10 +10,10 @@ const bot = new Discord.Client();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
 
 let watchTimer;    // ref for interval in order to stop it for restarts
-let lastWatch = Date.now()
 
 bot.commands = new Discord.Collection();
 bot.aliases = new Discord.Collection();
+bot.lastWatch = Date.now();
 
 //populate commands list from files in commands folder
 for (const file of commandFiles) {
@@ -34,11 +34,11 @@ bot.on('ready', () => {
     bot.channels.fetch(config.botChannel)
     .then(channel => {
         channel.send(`${bot.user.username} is now online, greetings Tenno.\nFor a list of my commands please use \`${config.prefix}help\``);
-        
+        //init check
+        watch.watchCheck(channel, bot);
         //timer for !watch updates
         watchTimer = setInterval(async function() {
-            watch.watchCheck(channel, bot, lastWatch);
-            lastWatch = Date.now()// needs to await watchCheck
+            watch.watchCheck(channel, bot);
     }, 60000);
     })
 });

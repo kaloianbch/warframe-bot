@@ -29,12 +29,12 @@ module.exports = {
     notification: function(fissData, args, lastCheckedDate){
 		console.log(`Fissure args: tier-${args.fiss}, mission-${args.mission}, faction-${args.faction}, lastchecked-${lastCheckedDate}`)
 		let printData = []
+		let now = Date.now();
         for(i in fissData){ //TODO - cleaner, generic args check
-			if((lastCheckedDate === undefined || (lastCheckedDate <= Date.parse(fissData[i].activation) && Date.parse(fissData[i].activation) <= Date.now()))
+			if((lastCheckedDate === undefined || (lastCheckedDate <= Date.parse(fissData[i].activation) && Date.parse(fissData[i].activation) <= now))
 			&& (args.fiss === undefined || String(fissData[i].tier).toLowerCase().includes(args.fiss)) 
 			&& (args.mission === undefined || String(fissData[i].missionType).toLowerCase().includes(args.mission))
 			&& (args.faction === undefined || String(fissData[i].enemy).toLowerCase().includes(args.faction))){
-				console.log('found new fissure: ' + JSON.stringify(fissData[i]))
 				printData.push(fissData[i]);
 			}
 		}
