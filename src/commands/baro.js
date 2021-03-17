@@ -22,7 +22,7 @@ module.exports = {
             return baroInvListMsg(baroData);
         } else{
 			if(lastCheckedDate !== undefined){
-				return null;
+				return null
 			}
             return baroTimeTillMsg(baroData);
         }

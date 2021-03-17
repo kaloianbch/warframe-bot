@@ -32,7 +32,7 @@ module.exports = {
         
 			if(!invData[i].completed 
                 && (lastCheckedDate === undefined 
-                    || (lastCheckedDate < Date.parse(fissData.activation) && Date.parse(fissData.activation) < Date.now))
+                    || (lastCheckedDate <= Date.parse(invData[i].activation) && Date.parse(fissData[i].activation) <= Date.now())
                 && (args.invReward == null || String(invData[i].attacker.reward.itemString).toLowerCase().includes(args.invReward)
                     || String(invData[i].defender.reward.itemString).toLowerCase().includes(args.invReward))
                 && (args.faction == null || String(invData[i].attackingFaction).toLowerCase().includes(args.faction) 
