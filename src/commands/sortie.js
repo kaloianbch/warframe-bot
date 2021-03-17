@@ -22,7 +22,7 @@ module.exports = {
     notification: function(sortieData, args, lastCheckedDate){
 		console.log(`Sortie args: lastchecked-${lastCheckedDate}`)
 		let now = Date.now()
-		if(lastCheckedDate === undefined || (lastCheckedDate <= Date.parse(sortieData.activation) && Date.parse(sortieData.activation) <= now)) {
+		if(lastCheckedDate === undefined || (lastCheckedDate <= Date.parse(sortieData.activation))) {
 			return `\n\`${stringTable.create(sortieData.variants,{
 				headers: ['node', 'missionType', 'modifier', 'modifierDescription'], capitalizeHeaders: true 
 			})}\``;

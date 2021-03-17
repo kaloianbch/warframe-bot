@@ -4,8 +4,7 @@ const config = require('../res/bot-config.json');
 
 module.exports = {
     getWfStatInfo: function (path) {
-        try{
-            return new Promise((resolve, reject) => {//TODO - wrapper with handler for rejections
+            return new Promise((resolve, reject) => {
                 https.get(path, (response) => {
                     let chunks_of_data = [];
             
@@ -18,17 +17,11 @@ module.exports = {
                         let response_body = Buffer.concat(chunks_of_data);
                         resolve(JSON.parse(response_body));
                     });
-            
-                    response.on('error', (error) => {
-                        console.log(`API fetch failed for: ${path}`, error)
-                        reject(error);
-                    });
+                }).on('error', (e) => { //TODO, handle the null return
+                    console.error(e);
+                    return null;
                 });
             });
-        }
-        catch(err){
-            console.log(err);
-        }
     },
     
     dateTimeMsgFormat : function (ISOdate) {
