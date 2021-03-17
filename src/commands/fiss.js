@@ -33,7 +33,7 @@ module.exports = {
         for(i in fissData){ //TODO - cleaner, generic args check
 			if((lastCheckedDate === undefined || (lastCheckedDate <= Date.parse(fissData[i].activation) && Date.parse(fissData[i].activation) <= now))
 			&& (args.fiss === undefined || String(fissData[i].tier).toLowerCase().includes(args.fiss)) 
-			&& (args.mission === undefined || String(fissData[i].missionType).toLowerCase().includes(args.mission))
+			&& (args.mission === undefined || String(fissData[i].missionType).toLowerCase() == (args.mission))
 			&& (args.faction === undefined || String(fissData[i].enemy).toLowerCase().includes(args.faction))){
 				printData.push(fissData[i]);
 			}
