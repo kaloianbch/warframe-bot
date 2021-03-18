@@ -48,7 +48,7 @@ module.exports = {
                 });
 			}
 		}
-		if(!Object.keys(printData).length){
+		if(!printData.length){
 			return null
 		}
         
