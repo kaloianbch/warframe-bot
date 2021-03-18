@@ -23,23 +23,25 @@ module.exports = {
             console.log('fetch time: ' + new Date(state.timestamp));
 
             for (sub of subList){
-                let subNotStr;
+                console.log('User: ' + sub.userID)
                 for (entry of sub.subData){
+                    let subNotificationStr;
+
                     switch(entry.command) {
                         case('baro'):
-                            subNotStr = notifyWrapper(entry.command, state.voidTrader, entry.args,  bot)
+                            subNotificationStr = notifyWrapper(entry.command, state.voidTrader, entry.args,  bot)
                         break;
     
                         case('fissure'):
-                            subNotStr = notifyWrapper(entry.command, state.fissures, entry.args,  bot)
+                            subNotificationStr = notifyWrapper(entry.command, state.fissures, entry.args,  bot)
                         break;
     
                         case('invasion'):
-                            subNotStr = notifyWrapper(entry.command, state.invasions, entry.args,  bot)
+                            subNotificationStr = notifyWrapper(entry.command, state.invasions, entry.args,  bot)
                         break;
     
                         case('sortie'):
-                            subNotStr = notifyWrapper(entry.command, state.sortie, entry.args,  bot)
+                            subNotificationStr = notifyWrapper(entry.command, state.sortie, entry.args,  bot)
                         break;
     
                         case('time'):
@@ -47,19 +49,21 @@ module.exports = {
                         break;
                         
                         default:
-                            subNotStr = null;
+                            subNotificationStr = null;
                         break;  
                     }
-                }
-                console.log('ret str:' + subNotStr)
-                if(subNotStr !== null){
-                    bot.users.fetch(sub.userID).then(function(user) {
-                        try{
-                            user.send(`Notification for you opperator:\n${subNotStr}`)
-                        } catch(error){
-                            channel.send(`Failed to send a DM to ${user}. Have you enabled DMs?`)
-                        }
-                    });
+
+                    console.log('return string:' + subNotificationStr)
+
+                    if(subNotificationStr !== null){
+                        bot.users.fetch(sub.userID).then(function(user) {
+                            try{
+                                user.send(`Notification for you opperator:\n${subNotificationStr}`)
+                            } catch(error){
+                                channel.send(`Failed to send a DM to ${user}. Have you enabled DMs?`)
+                            }
+                        });
+                    }
                 }
             }
             
