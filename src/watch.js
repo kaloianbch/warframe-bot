@@ -51,7 +51,7 @@ module.exports = {
                         break;  
                     }
                 }
-
+                console.log('ret str:' + subNotStr)
                 if(subNotStr !== null){
                     bot.users.fetch(sub.userID).then(function(user) {
                         try{

@@ -30,10 +30,14 @@ module.exports = {
 		console.log(`Fissure args: tier-${args.fiss}, mission-${args.mission}, faction-${args.faction}, lastchecked-${lastCheckedDate}`)
 		let printData = []
         for(i in fissData){ //TODO - cleaner, generic args check
+			console.log('timestamp:' + new Date(lastCheckedDate))
+			console.log('activation:' + new Date(fissData[i].activation))
+			console.log('----')
 			if((lastCheckedDate === undefined || lastCheckedDate <= Date.parse(fissData[i].activation))
 			&& (args.fiss === undefined || String(fissData[i].tier).toLowerCase().includes(args.fiss)) 
 			&& (args.mission === undefined || String(fissData[i].missionType).toLowerCase() == (args.mission))
 			&& (args.faction === undefined || String(fissData[i].enemy).toLowerCase().includes(args.faction))){
+				console.log('hit')
 				printData.push(fissData[i]);
 			}
 		}
