@@ -43,6 +43,10 @@ module.exports = {
                         case('sortie'):
                             subNotificationStr = notifyWrapper(entry.command, state.sortie, entry.args,  bot)
                         break;
+
+                        case('arbitration'):
+                            subNotificationStr = notifyWrapper(entry.command, state.arbitration, entry.args,  bot)
+                        break;
     
                         case('time'):
                             //TODO
