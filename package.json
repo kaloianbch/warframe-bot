@@ -11,6 +11,8 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "pm2": "^4.5.5",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
     "string-table": "^0.1.5"
   }
 }

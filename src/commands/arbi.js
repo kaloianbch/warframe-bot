@@ -34,7 +34,7 @@ module.exports = {
 		console.log(`Sortie args: lastchecked-${lastCheckedDate} mission-${args.mission}`)
 	
 		if((lastCheckedDate === undefined || lastCheckedDate <= Date.parse(arbiData.activation))
-		&&(args.mission === undefined || String(arbiData.type).toLowerCase() == (args.mission))) {
+		&&(args.mission === undefined || String(arbiData.type).toLowerCase() == (args.mission))) {//TODO - Dark Sector Defence and other DS missions
 
 			return `The current arbitration is **${arbiData.type}** on **${arbiData.node}** vs **${arbiData.enemy}** (**eta: ${commons.timeLeftWithSecMsgFormat(arbiData.expiry)}**)`
 		}

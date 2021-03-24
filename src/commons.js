@@ -1,29 +1,24 @@
-const https = require('https');
+var rp = require('request-promise');
 
 const config = require('../res/bot-config.json');
 
 module.exports = {
-    getWfStatInfo: function (path) {
-            return new Promise((resolve, reject) => {
-                https.get(path, (response) => {
-                    let chunks_of_data = [];
-            
-                    response.on('data', (fragments) => {
-                        chunks_of_data.push(fragments);
-                    });
-            
-                    response.on('end', () => {
-                        console.log(`API fetch resolved for: ${path}`)
-                        let response_body = Buffer.concat(chunks_of_data);
-                        resolve(JSON.parse(response_body));
-                    });
-                }).on('error', (e) => { //TODO, handle the null return
-                    console.error(e);
-                    return null;
-                });
-            });
-    },
     
+    getWfStatInfo : function (path) {
+        return rp({
+            method: 'GET', 
+            uri: path, 
+            headers: { 'User-Agent': 'Request-Promise', 'Content-Type': 'application/json'},
+            json: true 
+        })
+        .then(function (data) {
+            return data
+        })
+        .catch(function (err) {
+            console.error(err)
+        });
+    },
+
     dateTimeMsgFormat : function (ISOdate) {
         let dateTill = new Date(ISOdate);
         let dateCurr = new Date(Date.now());
