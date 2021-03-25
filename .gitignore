@@ -154,3 +154,5 @@ $RECYCLE.BIN/
 
 **/bot-config.json
 **/subs/*
+
+.idea/*
