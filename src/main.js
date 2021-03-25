@@ -12,12 +12,13 @@ bot.aliases = new Discord.Collection();
 // used to see if a new mission has shown up since previous check
 bot.lastWatch = Date.now() - config.updateTick;
 
-// populate commands list from files in commands folder
+// populate commands hash map from files in commands folder
 commandFiles.forEach((file) => {
   const command = require(`./commands/${file}`);
   bot.commands.set(command.name, command);
 });
 
+// same but makes a hash map for all the aliases
 commandFiles.forEach((file) => {
   const command = require(`./commands/${file}`);
   command.aliases.forEach((alias) => {
@@ -26,17 +27,16 @@ commandFiles.forEach((file) => {
 });
 
 // bot init
-bot.on('ready', () => {
+bot.on('ready', async () => {
   console.log(`Logged in as ${bot.user.tag}!`);
-  bot.channels.fetch(config.botChannel)
-    .then((channel) => {
-      channel.send(`${bot.user.username} is now online, greetings Tenno.\nFor a list of my commands please use \`${config.prefix}help\``);
+  const botChannel = await bot.channels.fetch(config.botChannel);
 
-      // timer for !watch updates
-      setInterval(() => {
-        bot.lastWatch = watch.notificationsCheck(channel, bot);
-      }, config.updateTick);
-    });
+  botChannel.send(`${bot.user.username} is now online, greetings Tenno.\nFor a list of my commands please use \`${config.prefix}help\``);
+
+  // timer for !watch updates
+  setInterval(async () => {
+    bot.lastWatch = await watch.notificationsCheck(botChannel, bot);
+  }, config.updateTick);
 });
 
 // command handler
@@ -61,8 +61,7 @@ bot.on('message', (message) => {
     command.execute(message, args);
   } catch (error) {
     console.error(error);
-    message.channel.send(`I've been thinking, ${message.author}...I thought you'd want to know.`
-        + '\n(Command Execution Error)');
+    message.channel.send(`I've been thinking, ${message.author}...I thought you'd want to know.\n(Command Execution Error)`);
   }
 });
 
