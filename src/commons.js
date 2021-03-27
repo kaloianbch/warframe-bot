@@ -30,11 +30,11 @@ function timeAddZero(num) {
   }
   return `0${num}`;
 }
-// returns xx:xx formated time from Date object
+// returns xx:xx formatted time from Date object
 function timeToString(dateTime) {
   return `${timeAddZero(dateTime.getHours())}:${timeAddZero(dateTime.getMinutes())}`;
 }
-// returns date as formated string
+// returns date as formatted string
 function dateToString(dateTime) {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
