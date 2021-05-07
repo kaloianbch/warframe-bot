@@ -1,5 +1,3 @@
-const stringTable = require('string-table');
-
 const config = require('../../res/bot-config.json');
 const commons = require('../commons.js');
 
@@ -16,7 +14,7 @@ module.exports = {
     const argsFound = commons.valiateArgs(args, this.validArgs, config.validArgsData);
     if (argsFound.invalid.length) { message.reply(`\nthe argument(s) '${argsFound.invalid}' are unknown. I will search without them.`); }
 
-       	commons.getWfStatInfo(`${config.WFStatApiURL}/arbitration`).then((arbiData) => {
+    commons.getWfStatInfo(`${config.WFStatApiURL}/arbitration`).then((arbiData) => {
       const filteredReply = this.notification(arbiData, argsFound.valid);
 
       if (filteredReply === null) {
@@ -29,9 +27,9 @@ module.exports = {
 
   notification(arbiData, args, lastCheckedDate) {
     console.log(`Sortie args: lastchecked-${lastCheckedDate} mission-${args.mission}`);
-    console.log(arbiData.expiry);
+    // TODO - Dark Sector Defence and other DS missions
     if ((lastCheckedDate === undefined || lastCheckedDate <= Date.parse(arbiData.activation))
-		&& (args.mission === undefined || String(arbiData.type).toLowerCase() == (args.mission))) { // TODO - Dark Sector Defence and other DS missions
+        && (args.mission === undefined || String(arbiData.type).toLowerCase() === (args.mission))) {
       return `The current arbitration is **${arbiData.type}** on **${arbiData.node}** vs **${arbiData.enemy}** (**eta: ${commons.timeLeftMsgFormat(arbiData.expiry, true)}**)`;
     }
     return null;

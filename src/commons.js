@@ -85,6 +85,7 @@ function getWfStatInfo(path) {
   })
     .then((data) => data)
     .catch((err) => {
+      // TODO - tell the user something went wrong
       console.error(err);
     });
 }

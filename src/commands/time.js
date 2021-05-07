@@ -23,8 +23,7 @@ module.exports = {
     commons.getWfStatInfo(`${config.WFStatApiURL}/${argsFound.valid.cycle.path}`).then((timeData) => {
       switch (argsFound.valid.cycle.path) {
         case '/cambionCycle':
-          const time = timeData.active.charAt(0).toUpperCase() + timeData.active.slice(1);
-          return message.reply(`\nIt is currently **${time}** on ${argsFound.valid.cycle.name} (${commons.timeLeftMsgFormat(timeData.expiry, true)} left)`);
+          return message.reply(`\nIt is currently **${timeData.active.charAt(0).toUpperCase() + timeData.active.slice(1)}** on ${argsFound.valid.cycle.name} (${commons.timeLeftMsgFormat(timeData.expiry, true)} left)`);
         default:
           return message.reply(`\nIt is currently **${timeData.state}** on ${argsFound.valid.cycle.name} (${commons.timeLeftMsgFormat(timeData.expiry, true)} left)`);
       }

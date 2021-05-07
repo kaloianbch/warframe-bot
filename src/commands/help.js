@@ -1,36 +1,37 @@
 const config = require('../../res/bot-config.json');
+
 module.exports = {
-	name: 'help',
-	description: 'List all of my commands or info about a specific command.',
-	aliases: ['commands'],
-	usage: `${config.prefix}help [command name]`,
-	cooldown: 5,
+  name: 'help',
+  description: 'List all of my commands or info about a specific command.',
+  aliases: ['commands'],
+  usage: `${config.prefix}help [command name]`,
+  cooldown: 5,
 
-	execute(message, args) {
-        const { commands } = message.client;
+  execute(message, args) {
+    const { commands } = message.client;
 
-        if (!args.length) {
+    if (!args.length) {
+      return message.reply(`\nHere's a list of all my commands:\n${commands.map((command) => `**${command.name}**`).join('\n')}`
+            + `\nYou can send \`${config.prefix}help [command name]\` to get info on a specific command.`);
+    }
 
-            return message.reply(`\nHere's a list of all my commands:\n${commands.map(command => `**${command.name}**`).join('\n')}`
-            + `\nYou can send \`${config.prefix}help [command name]\` to get info on a specific command.`)
-        }
+    const name = args[0].toLowerCase();
+    const command = commands.get(name)
+        || commands.find((c) => c.aliases && c.aliases.includes(name));
 
-        const name = args[0].toLowerCase();
-        const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
+    if (!command) {
+      return message.reply('that is not a valid command.');
+    }
 
-        if (!command) {
-            return message.reply('that is not a valid command.');
-        }
+    const data = [];
 
-        let data = []
+    data.push(`**Name:** ${command.name}`);
 
-        data.push(`**Name:** ${command.name}`);
+    if (command.aliases) data.push(`\n**Aliases:** ${command.aliases.join(', ')}`);
+    if (command.description) data.push(`\n**Description:** ${command.description}`);
+    if (command.usage) data.push(`\n**Usage:** ${command.usage}`);
+    if (command.example) data.push(`\n**Example:** ${command.example}`);
 
-        if (command.aliases) data.push(`\n**Aliases:** ${command.aliases.join(', ')}`);
-        if (command.description) data.push(`\n**Description:** ${command.description}`);
-        if (command.usage) data.push(`\n**Usage:** ${command.usage}`);
-        if (command.example) data.push(`\n**Example:** ${command.example}`);
-
-        return message.reply(`\n${data}`)
-	},
+    return message.reply(`\n${data}`);
+  },
 };
